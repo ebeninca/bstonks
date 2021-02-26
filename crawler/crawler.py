@@ -1,5 +1,5 @@
 # https://statusinvest.com.br/acoes/busca-avancada
-import scrapy
+'''import scrapy
 import time
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -46,7 +46,7 @@ class seleniumSpider(scrapy.Spider):
         self.driver.close()
 
     def parse2(self, response):
-        print('you are here!')
+        print('you are here!')'''
 
 
 # class LoginSpider(scrapy.Spider):

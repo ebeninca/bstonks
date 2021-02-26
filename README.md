@@ -1,5 +1,11 @@
 # macas-stonks
 
+https://github.com/marketplace/actions/deploy-to-heroku#deploy-with-docker
+
+https://medium.com/@ksashok/containerise-your-python-flask-using-docker-and-deploy-it-onto-heroku-a0b48d025e43
+
+https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-pt
+
 https://www.fool.com/investing/general/2015/02/07/why-this-67-billion-hedge-fund-strategy-doesnt-wor.aspx
 
 https://realpython.com/offline-python-deployments-with-docker/

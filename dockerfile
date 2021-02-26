@@ -15,3 +15,6 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY ./src/ /usr/src/app/
+
+ENTRYPOINT ["python"]
+CMD ["./flask-app/app.py"]

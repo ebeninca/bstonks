@@ -1,10 +1,17 @@
+'''
+Formula de greenblatt
+Formula de Graham
+Valuation DCF
+Modelo de Gordon
+'''
 from flask import Flask
 import requests
 import json
 import logging
-from operator import itemgetter
+import os
 
 app = Flask(__name__)
+port = int(os.environ.get("PORT", 5000))
 
 
 # TODO eV_Ebit e roic
@@ -48,4 +55,4 @@ def greenblatt():
 
 if __name__ == '__main__':
     # app.run()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=port)
