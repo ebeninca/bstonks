@@ -1,0 +1,29 @@
+{% extends "base.jinja" %}
+
+{% block title %}Greenblatt{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Ranking pela fórmula de Greenblatt</h1>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    {% for col in colnames %}
+                    <th scope="col">{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stocks %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    {% for col in colnames %}
+                    <td>{{ stock[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

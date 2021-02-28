@@ -1,5 +1,13 @@
 # macas-stonks
 
+https://code.visualstudio.com/docs/python/tutorial-flask
+
+https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-pt
+
+https://www.fullstackpython.com/flask.html
+
+https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/
+
 https://github.com/marketplace/actions/deploy-to-heroku#deploy-with-docker
 
 https://medium.com/@ksashok/containerise-your-python-flask-using-docker-and-deploy-it-onto-heroku-a0b48d025e43
