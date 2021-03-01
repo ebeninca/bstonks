@@ -1,6 +1,7 @@
 attrs==20.3.0
 Automat==20.2.0
 autopep8==1.5.4
+Bootstrap-Flask==1.5.1
 certifi==2020.12.5
 cffi==1.14.5
 chardet==4.0.0
@@ -10,7 +11,6 @@ cryptography==3.4.6
 cssselect==1.1.0
 dominate==2.6.0
 Flask==1.1.1
-Flask-Bootstrap==3.3.7.1
 flask-nav==0.6
 hyperlink==21.0.0
 idna==2.10
