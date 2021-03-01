@@ -21,7 +21,7 @@ import webbrowser
 app = Flask(__name__)
 port = int(os.environ.get("PORT", 5000))
 
-Bootstrap(app)
+bootstrap = Bootstrap(app)
 nav = Nav()
 nav.init_app(app)
 
