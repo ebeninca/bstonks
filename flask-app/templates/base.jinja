@@ -1,12 +1,12 @@
 {# ``base.html`` is the template all our other templates derive from. While
-   Flask-Bootstrap ships with its own base, it is good form to create a custom
-   one for our app, as it allows customizing some aspects.
+    Flask-Bootstrap ships with its own base, it is good form to create a custom
+    one for our app, as it allows customizing some aspects.
 
-   Deriving from bootstap/base.html gives us a basic page scaffoling.
+    Deriving from bootstap/base.html gives us a basic page scaffoling.
 
-   You can find additional information about template inheritance at
+    You can find additional information about template inheritance at
 
-   http://jinja.pocoo.org/docs/templates/#template-inheritance
+    http://jinja.pocoo.org/docs/templates/#template-inheritance
 #}
 {% extends "base.html" %}
 {% from 'bootstrap/nav.html' import render_nav_item %}
@@ -15,28 +15,29 @@
 {% import "bootstrap_wtf.html" as wtf %} #}
 {# 
 {% block styles %}
-   {{ super() }}
-   <link rel="stylesheet"
+    {{ super() }}
+    <link rel="stylesheet"
          href="{{url_for('.static', filename='flask.css')}}">
 {% endblock %} #}
 
 {# We also set a default title, usually because we might forget to set one.
-   In our sample app, we will most likely just opt not to change it #}
+    In our sample app, we will most likely just opt not to change it #}
 {% block title %}Sample App for Flask-Bootstrap{% endblock %}
 
 {# Finally, round things out with navigation #}
 {% block content %}
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" 
-         data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" 
-         aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="#">Macas Stonks</a>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            {{ nav.mynavbar.render() }}
-         </ul>
-      </div>   
-   </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" 
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Macas Stonks</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            {{ render_nav_item('index','Home') }}
+            {{ render_nav_item('greenblatt','Greenblatt') }}
+            </ul>
+        </div>   
+    </nav>
 {% endblock %}

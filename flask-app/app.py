@@ -29,11 +29,14 @@ nav.init_app(app)
 @nav.navigation()
 def mynavbar():
     app.logger.info("### mynavbar ###")
-    return Navbar(
-        'Macas Stonks',
-        View('Home', 'index'),
-        View('Greenblatt', 'greenblatt'),
-    )
+    # return Navbar(
+    #     'Macas Stonks',
+    #     View('Home', 'index'),
+    #     View('Greenblatt', 'greenblatt'),
+    # )
+    menus = [('greenblatt', 'Greenblatt'),
+             ('index', 'Home')]
+    return menus
 
 
 @app.route('/')
