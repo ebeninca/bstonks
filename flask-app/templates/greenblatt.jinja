@@ -1,0 +1,36 @@
+{% extends "base.jinja" %}
+
+{% block title %}Greenblatt{% endblock %}
+
+{% block content %}
+   {{ super() }}
+    <div class="jumbotron">
+        <h1>Ranking pela fórmula de Greenblatt</h1>
+        <h6>* Removidas empresas com liquidez média diária menor que 200 mil reais.</h6>
+        <h6>* Removidas empresas com P/L e ROE negativos.</h6>
+    </div>
+    <div class="mx-3">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for col in colnames %}
+                        <th scope="col">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col in colnames %}
+                        <td>{{ stock[col] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+{% endblock %}

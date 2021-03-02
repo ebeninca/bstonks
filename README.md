@@ -1,5 +1,24 @@
 # macas-stonks
 
+https://macas-stonks.herokuapp.com/
+
+https://macas-stonks-dev.herokuapp.com/
+# referências
+
+https://bootstrap-flask.readthedocs.io/en/stable/migrate.html
+
+https://getbootstrap.com/docs/4.0/components/list-group/
+
+https://getbootstrap.com/docs/5.0/content/tables/
+
+https://code.visualstudio.com/docs/python/tutorial-flask
+
+https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-pt
+
+https://www.fullstackpython.com/flask.html
+
+https://flask.palletsprojects.com/en/1.1.x/tutorial/layout/
+
 https://github.com/marketplace/actions/deploy-to-heroku#deploy-with-docker
 
 https://medium.com/@ksashok/containerise-your-python-flask-using-docker-and-deploy-it-onto-heroku-a0b48d025e43
