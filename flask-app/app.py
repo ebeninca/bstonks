@@ -65,6 +65,9 @@ def greenblattApi():
         if "liquidezMediaDiaria" not in stock or int(stock["liquidezMediaDiaria"]) < 200000:
             stocksJson.pop(idx)
             continue
+        if "p_L" not in stock or "roe" not in stock:
+            stocksJson.pop(idx)
+            continue
         if int(stock["p_L"]) <= 0 or int(stock["roe"]) <= 0:
             stocksJson.pop(idx)
             continue
