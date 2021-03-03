@@ -1,13 +1,11 @@
 {% extends "base.jinja" %}
 
-{% block title %}Greenblatt{% endblock %}
-
 {% block content %}
    {{ super() }}
     <div class="jumbotron">
-        <h1>Ranking pela fórmula de Greenblatt</h1>
+        <h1>Ações mais descontadas pela fórmula de Graham</h1>
         <h6>* Removidas empresas com liquidez média diária menor que 200 mil reais.</h6>
-        <h6>* Removidas empresas com P/L e ROE negativos.</h6>
+        <h6>* Removidas empresas com VPA e LPA negativos.</h6>
     </div>
     <div class="mx-3">
         <div class="table-responsive">

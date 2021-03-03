@@ -1,5 +1,7 @@
 # macas-stonks
 
+https://www.capitalinvest-group.com/pt/calcular-valor-empresa-venda-multiplos/
+
 https://macas-stonks.herokuapp.com/
 
 https://macas-stonks-dev.herokuapp.com/
