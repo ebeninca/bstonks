@@ -19,7 +19,7 @@ def graham():
 @bpGraham.route('/api/graham')
 def grahamApi():
     current_app.logger.info("### graham ###")
-    locale.setlocale(locale.LC_MONETARY, '')
+    locale.setlocale(locale.LC_MONETARY, 'pt_BR.UTF-8')
 
     resp = requests.get(
         "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={}")
@@ -57,7 +57,7 @@ def grahamApi():
         stock['lpa'] = '%.2f' % round(stock['lpa'], 2)
         stock['val_Intrinseco'] = locale.currency(stock['val_Intrinseco'])
         stock['desconto'] = locale.currency(stock['desconto'])
-        
+
     stocksJson.sort(key=lambda x: (x["margem"]), reverse=True)
 
     for stock in stocksJson:
