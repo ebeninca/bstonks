@@ -49,11 +49,11 @@ def greenblattApi():
                     'liquidezCorrente', 'peg_Ratio', 'receitas_Cagr5', 'liquidezMediaDiaria', 'vpa', 'lpa',
                     'valorMercado', 'lucros_Cagr5', 'dy']:
             stock.pop(key, None)
-            
-        stock['p_L'] = '%.2f' % stock['p_L']
-        stock['eV_Ebit'] = 0 if "eV_Ebit" not in stock else '%.2f' % stock['eV_Ebit']
-        stock['roe'] = '%.2f' % stock['roe']
-        stock['roic'] = 0 if "roic" not in stock else '%.2f' % stock['roic']
+
+        stock['p_L'] = '%.2f' % round(stock['p_L'], 2)
+        stock['eV_Ebit'] = '%.2f' % (int(0) if "eV_Ebit" not in stock else round(stock['eV_Ebit'], 2))
+        stock['roe'] = '%.2f' % round(stock['roe'], 2)
+        stock['roic'] = '%.2f' % (int(0) if "roic" not in stock else round(stock['roic'], 2))
 
     stocksJson.sort(key=lambda x: (x["final_Score"]), reverse=True)
     return json.dumps(stocksJson), 200, {'content-type': 'application/json'}

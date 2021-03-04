@@ -12,10 +12,12 @@ import os
 
 from views.greenblatt import bpGreenblatt
 from views.graham import bpGraham
+from views.imposto import bpImposto
 
 app = Flask(__name__)
 app.register_blueprint(bpGreenblatt)
 app.register_blueprint(bpGraham)
+app.register_blueprint(bpImposto)
 
 port = int(os.environ.get("PORT", 5000))
 bootstrap = Bootstrap(app)

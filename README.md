@@ -1,6 +1,14 @@
 # macas-stonks
 
+https://statusinvest.com.br/category/advancedsearchresult?search={"Sector":""}&CategoryType=1
+
 https://www.capitalinvest-group.com/pt/calcular-valor-empresa-venda-multiplos/
+
+https://statusinvest.com.br/category/tickerprice?ticker=ABEV3&type=0
+
+https://statusinvest.com.br/home/mainsearchquery?q=abev3
+
+https://github.com/jasondavindev/greenblatt-crawler
 
 https://macas-stonks.herokuapp.com/
 

@@ -23,7 +23,11 @@
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
                         {% for col in colnames %}
-                        <td>{{ stock[col] }}</td>
+                            {% if "companyName" in col or "ticker" in col %}
+                            <td class="text-left">{{ stock[col] }}</td>                             
+                            {% else %}
+                            <td class="text-right">{{ stock[col] }}</td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
