@@ -19,7 +19,7 @@ def graham():
 @bpGraham.route('/api/graham')
 def grahamApi():
     current_app.logger.info("### graham ###")
-    locale.setlocale(locale.LC_MONETARY, 'pt_BR.UTF-8')
+    locale.setlocale(locale.LC_MONETARY, '')
 
     resp = requests.get(
         "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={}")
