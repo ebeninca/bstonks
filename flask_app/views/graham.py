@@ -1,3 +1,16 @@
+'''
+O objetivo é rankear as ações pelo desconto em relação ao preço. Graham, o pai
+do value investing, descreveu em seu livro, O investidor inteligente, uma 
+formula para determinar o valor intriseco de uma ação, ou seja seu valor real 
+em determinado momento.
+
+sqrt(22.5 * vpa * lpa)
+
+Essa formula foi usada por muito tempo por Warren Buffet, pupilo de Graham,
+entretanto hoje ela é questionada, pois empresas de tecnologia costumam ter 
+pouco patrimonio liquido, distorcendo o resultado da formula. 
+
+'''
 from flask import Flask, Blueprint, render_template, current_app
 
 import requests

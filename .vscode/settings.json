@@ -2,6 +2,9 @@
     "python.pythonPath": "C:\\Python3\\Python39\\python.exe",
     "python.linting.pylintArgs": [
         "--init-hook",
-        "import sys; sys.path.insert(0, './views')"
+        "import sys; sys.path.insert(0, './flask_app/views')"
+    ],
+    "python.analysis.disabled": [
+        "unresolved-import"
     ]
 }

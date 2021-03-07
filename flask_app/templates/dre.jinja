@@ -1,0 +1,39 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+   {{ super() }}
+    <div class="jumbotron">
+        <h1>Demonstrativo do resultado do Exercício</h1>
+    </div>
+    {% if errorMsg %}
+    <div class="alert alert-info" role="alert">{{ errorMsg }}</div>
+    {% endif %}
+    <div class="mx-3">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for col in colnames %}
+                        <th scope="col">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col in colnames %}
+                            {% if "companyName" in col or "ticker" in col %}
+                            <td class="text-left">{{ stock[col] }}</td>
+                            {% else %}
+                            <td class="text-right">{{ stock[col] }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+{% endblock %}

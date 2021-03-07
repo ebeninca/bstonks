@@ -1,5 +1,7 @@
 # macas-stonks
 
+http://investidor-inteligente.com/benjamin-graham-margem-de-seguranca-investimento-acoes/
+
 https://statusinvest.com.br/category/advancedsearchresult?search={"Sector":""}&CategoryType=1
 
 https://www.capitalinvest-group.com/pt/calcular-valor-empresa-venda-multiplos/

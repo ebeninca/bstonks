@@ -1,3 +1,18 @@
+"""
+O objetivo aqui é rankear as ações pela formula de greenblat, temos a API do statusinvest
+aberta que nos fornece os indicadores necessarios.
+
+Existem duas versões da formula, a mais conhecida usa P/L e ROE, que atende a todo tipo
+de ação, a outra usa EV/EBIT e ROIC, que não serve para bancos, pois os mesmos nao possuem
+ROIC, sendo excluidos automaticamente.
+
+As ações são ordenadas primeiro por P/L, recebendo nota, o menor P/L recebe a 
+maior nota(numero total de ações que participam do ranking) e o maior P/L 
+recebe 1. O mesmo processo é feito para o ROE, sendo que o maior ROE recebe a
+maior nota. A soma das duas notas determina a classificação do ranking.
+
+TODO colocar opção para calculo com EV/EVIT e ROIC
+"""
 from flask import Flask, Blueprint, render_template, current_app
 
 import requests
@@ -51,9 +66,11 @@ def greenblattApi():
             stock.pop(key, None)
 
         stock['p_L'] = '%.2f' % round(stock['p_L'], 2)
-        stock['eV_Ebit'] = '%.2f' % (int(0) if "eV_Ebit" not in stock else round(stock['eV_Ebit'], 2))
+        stock['eV_Ebit'] = '%.2f' % (
+            int(0) if "eV_Ebit" not in stock else round(stock['eV_Ebit'], 2))
         stock['roe'] = '%.2f' % round(stock['roe'], 2)
-        stock['roic'] = '%.2f' % (int(0) if "roic" not in stock else round(stock['roic'], 2))
+        stock['roic'] = '%.2f' % (
+            int(0) if "roic" not in stock else round(stock['roic'], 2))
 
     stocksJson.sort(key=lambda x: (x["final_Score"]), reverse=True)
     return json.dumps(stocksJson), 200, {'content-type': 'application/json'}
