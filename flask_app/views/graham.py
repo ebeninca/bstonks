@@ -23,7 +23,7 @@ bpGraham = Blueprint('graham', __name__)
 
 
 @bpGraham.route('/graham')
-def graham():
+def index():
     current_app.logger.info("### graham ###")
     respJson = json.loads(grahamApi()[0])
     return render_template('graham.jinja', stocks=respJson, colnames=(respJson[0]).keys())

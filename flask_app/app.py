@@ -4,7 +4,7 @@ Formula de Graham
 Valuation DCF
 Modelo de Gordon
 '''
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect
 from flask_bootstrap import Bootstrap
 
 import logging
@@ -21,6 +21,10 @@ app.register_blueprint(bpGraham)
 app.register_blueprint(bpDre)
 app.register_blueprint(bpImposto)
 
+# app.extensions['bootstrap']['cdns']['jquery'] = WebCDN(
+#    '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/'
+# )
+
 port = int(os.environ.get("PORT", 5000))
 bootstrap = Bootstrap(app)
 
@@ -28,7 +32,13 @@ bootstrap = Bootstrap(app)
 @app.route('/')
 def index():
     app.logger.info("### index ###")
+    app.logger.debug(app.url_map)
     return render_template('index.jinja')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect(url_for('static', filename='dollar_sign.ico'))
 
 
 if __name__ == '__main__':

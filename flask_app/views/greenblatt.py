@@ -23,7 +23,7 @@ bpGreenblatt = Blueprint('greenblatt', __name__)
 
 
 @bpGreenblatt.route('/greenblatt')
-def greenblatt():
+def index():
     current_app.logger.info("### greenblatt ###")
     respJson = json.loads(greenblattApi()[0])
     return render_template('greenblatt.jinja', stocks=respJson, colnames=(respJson[0]).keys())
