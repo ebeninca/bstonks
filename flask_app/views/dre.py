@@ -47,9 +47,8 @@ def search():
 @bpDre.route('/dre/data', methods=['POST'])
 def data():
     form = request.form
-    print("TICKER: " + form.get('tickerSelect'))
     # and form.validate():
-    if form.get('tickerSelect') is not "" and request.method == 'POST':
+    if form.get('tickerSelect') != "" and request.method == 'POST':
         respJson = json.loads(dreApi(form.get('tickerSelect'))[0])
         return render_template('dre.jinja', form=form, stocks=respJson,
                                colnames=(respJson[0]).keys())
