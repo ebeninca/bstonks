@@ -1,14 +1,28 @@
 {% extends "base.jinja" %}
 
+{% block styles %}
+    {{ super() }}
+    <style>
+        .table-sm{
+            font-size: 11px;
+        }
+    </style>
+{% endblock %}
+
 {% block scripts %}
     {{ super() }}
-    <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
+    <script src="
+        https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js">
+    </script>
     <script>
-    $('.basicAutoSelect').autoComplete({
-        resolverSettings: {
-            url: '{{ url_for("dre.search") }}'
-        }
-    });
+        $('.basicAutoSelect').autoComplete({
+            resolverSettings: {
+                url: '{{ url_for("dre.search") }}'
+            }
+        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 {% endblock %}
 
@@ -18,7 +32,7 @@
         <h1>Demonstrativo de resultado do exercício</h1>
         <form method="POST" action="{{ url_for('dre.data') }}">
             <select onchange="this.form.submit()" class="form-control basicAutoSelect" 
-            name="tickerSelect" placeholder="Digite para buscar" autocomplete="off"></select>
+            name="tickerSelect" placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
         </form> 
     </div>
     {% if errorMsg %}
@@ -30,7 +44,10 @@
                 <thead class="table-dark">
                     <tr>
                         {% for col in colnames %}
-                        <th scope="col">{{ col }}</th>
+                        <th scope="col" data-toggle="tooltip" data-placement="top" 
+                            title="Testando tooltip Testando tooltip Testando tooltip Testando tooltip 
+                            Testando tooltip Testando tooltip Testando tooltip Testando tooltip 
+                            Testando tooltip Testando tooltip Testando tooltip Testando tooltip ">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>

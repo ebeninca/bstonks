@@ -1,5 +1,9 @@
 # macas-stonks
 
+https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
+
+https://statusinvest.com.br/acao/getbsactivepassivechart?companyName=paoacucar&type=2
+
 http://investidor-inteligente.com/benjamin-graham-margem-de-seguranca-investimento-acoes/
 
 https://statusinvest.com.br/category/advancedsearchresult?search={"Sector":""}&CategoryType=1

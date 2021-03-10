@@ -21,7 +21,7 @@ bpDre = Blueprint('dre', __name__)
 
 @bpDre.route('/dre')
 def index():
-    #form = DreForm(request.form)
+    # form = DreForm(request.form)
     return render_template('dre.jinja')
 
 
@@ -73,50 +73,136 @@ def dreApi(companyId):
 
     locale.setlocale(locale.LC_MONETARY, '')
 
-    ''' iniciando com a coluna dos anos, nos dados retornados pelo 
+    ''' iniciando com a coluna dos anos, nos dados retornados pelo
         statusinvest, eles tem um lista propria, separada do resto dos dados
     '''
     dreDataJson['years'].sort(reverse=True)
-    ''' copiando os anos ordenados do maior para o menor, o formato é uma lista 
+    ''' copiando os anos ordenados do maior para o menor, o formato é uma lista
         de dict, porque é de facil aceitação pela biblioteca json
     '''
     finalData = [dict({'year': year}) for year in dreDataJson['years']]
     # inserindo TTM no inicio da lista
     finalData.insert(0, dict({'year': 'TTM'}))
 
-    ''' vamos para a lista contendo os dados, será necessario 
+    ignoreKeys = ['Custos - (R$)', 'Lucro Bruto - (R$)', 'Despesas Receitas Operacionais - (R$)',
+                  'Amortização Depreciação', 'EBIT - (R$)', 'Resultado não operacional - (R$)',
+                  'Impostos - (R$)', 'Lucro atribuído a Controladora', 'Lucro atribuído a Não Controladores',
+                  'Dívida Bruta - (R$)', 'ROIC - (%)', 'Margem Bruta - (%)', 'Margem Ebitda - (%)']
+
+    callUrl = "https://statusinvest.com.br/acao/getbsactivepassivechart?"
+    callUrl += "companyName=" + companyId
+    callUrl += "&type=2"
+
+    respPassive = requests.get(callUrl)
+    passiveDataJson = json.loads(respPassive.text)
+
+    for idxLine, line in enumerate(passiveDataJson):
+        valueTmp = (str(line['patrimonioLiquido']))[:-6]
+        value = ('%.2f' % float(valueTmp[:-2] + '.' + valueTmp[2:])) + "M"
+        if idxLine == 0:
+            finalData[0].update(
+                {'Patrimônio Líquido': value})
+        for idx, data in enumerate(finalData):
+            if data['year'] == line['year']:
+                finalData[idx].update(
+                    {'Patrimônio Líquido': value})
+
+    ''' vamos para a lista contendo os dados, será necessario
         transpor os dados de colunas para linhas
     '''
     for idx, content in enumerate(grid):
         # print(idx, content['isHeader'])
-        ''' a primeira entrada da grid é o header, não precisamos dela, 
+        ''' a primeira entrada da grid é o header, não precisamos dela,
             pois iremos pega-lo mais a frente
         '''
-        if not content['isHeader']:
-            columns = content['columns']
-            colName = ''
-            countDictItems = 0
+        if content['isHeader']:
+            continue
+        columns = content['columns']
+        colName = ''
+        countDictItems = 0
 
-            for idxCol in range(0, len(columns)-1, 1):
-                col = columns[idxCol]
-                # indice 0 é o nome da coluna
-                if idxCol == 0:
-                    # current_app.logger.debug(f'{idxCol} - {columns[idxCol]}')
-                    colName = col['value']
-                    continue
-                ''' indices com nome de coluna = DATA são os valores anuais, não
-                    temos interesse em percentuais de crescimento ano a ano
-                '''
-                if 'DATA' in col['name']:
-                    # current_app.logger.debug(
-                    #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
-                    finalData[countDictItems].update({colName: col['value']})
-                    countDictItems += 1
+        for idxCol in range(0, len(columns)-1, 1):
+            col = columns[idxCol]
+            # indice 0 é o nome da coluna
+            if idxCol == 0:
+                # current_app.logger.debug(f'{idxCol} - {columns[idxCol]}')
+                colName = col['value'].replace("/", "\x20")
+                continue
+            ''' indices com nome de coluna = DATA são os valores anuais, não
+                temos interesse em percentuais de crescimento ano a ano
+            '''
+            if 'DATA' in col['name'] and colName not in ignoreKeys:
+                # current_app.logger.debug(
+                #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
+                finalData[countDictItems].update({colName: (col['value']).replace(
+                    "\x20", "")})
+                countDictItems += 1
 
         # stock['price'] = locale.currency(stock['price'])
         # stock['vpa'] = '%.2f' % stock['vpa']
         # stock['lpa'] = '%.2f' % stock['lpa']
         # stock['val_Intrinseco'] = locale.currency(stock['val_Intrinseco'])
+
+    ignoreCashKeys = ['Saldo Final de Caixa e Equivalentes - (R$)', 'Saldo Inicial de Caixa e Equivalentes - (R$)',
+                      'Aumento de Caixa e Equivalentes - (R$)', 'Variação Cambial de Caixa e Equivalentes - (R$)',
+                      'Variações nos Ativos e Passivos - (R$)', 'Depreciação e Amortização - (R$)',
+                      'Lucro Líquido - (R$)', 'Equivalência Patrimonial - (R$)']
+
+    callUrl = "https://statusinvest.com.br/acao/getfluxocaixa?"
+    callUrl += "companyName=" + companyId
+    callUrl += "&type=2"
+
+    respCash = requests.get(callUrl)
+    cashDataJson = json.loads(respCash.text)
+
+    for idx, content in enumerate(cashDataJson):
+        if content['isHeader']:
+            continue
+        columnsList = content['columns']
+        colName = ''
+        countDictItems = 0
+        for idxCol, col in enumerate(columnsList):
+            if idxCol == 0:
+                colName = col['value'].replace("/", "\x20")
+                continue
+            if 'DATA' in col['name'] and colName not in ignoreCashKeys:
+                # current_app.logger.debug(
+                #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
+                if countDictItems == 0:
+                    finalData[0].update({colName: (col['value']).replace(
+                        "\x20", "")})
+                if countDictItems+1 < len(finalData):
+                    finalData[countDictItems+1].update({colName: (col['value']).replace(
+                        "\x20", "")})
+                    countDictItems += 1
+
+    callUrl = "https://statusinvest.com.br/acao/payoutresult?"
+    callUrl += "companyName=" + companyId
+    callUrl += "&type=2"
+
+    respPayout = requests.get(callUrl)
+    payoutDataJson = json.loads(respPayout.text)
+
+    percentualData = ((payoutDataJson['chart'])['series'])['percentual']
+    proventosData = ((payoutDataJson['chart'])['series'])['proventos']
+
+    percentualData.reverse()
+    proventosData.reverse()
+
+    for idxPercent in range(0, len(percentualData)-1, 1):
+        valuePerc = percentualData[idxPercent]
+        valueProv = proventosData[idxPercent]
+        if idxPercent == 0:
+            finalData[0].update(
+                {'Proventos': valueProv['valueSmall_F']})
+            finalData[0].update(
+                {'Payout': valuePerc['value_F']})
+        if idxPercent+1 < len(finalData):
+            finalData[idxPercent+1].update(
+                {'Proventos': valueProv['valueSmall_F']})
+            finalData[idxPercent+1].update(
+                {'Payout': valuePerc['value_F']})
+
     # print(years)
     # print(finalData)
 
