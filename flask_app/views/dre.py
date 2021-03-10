@@ -146,7 +146,7 @@ def dreApi(companyId):
     ignoreCashKeys = ['Saldo Final de Caixa e Equivalentes - (R$)', 'Saldo Inicial de Caixa e Equivalentes - (R$)',
                       'Aumento de Caixa e Equivalentes - (R$)', 'Variação Cambial de Caixa e Equivalentes - (R$)',
                       'Variações nos Ativos e Passivos - (R$)', 'Depreciação e Amortização - (R$)',
-                      'Lucro Líquido - (R$)', 'Equivalência Patrimonial - (R$)']
+                      'Lucro Líquido - (R$)', 'Equivalência Patrimonial - (R$)', 'Caixa Líquido Atividades de Investimento - (R$)']
 
     callUrl = "https://statusinvest.com.br/acao/getfluxocaixa?"
     callUrl += "companyName=" + companyId
