@@ -210,9 +210,13 @@ def dreApi(companyId):
     for idxPercent in range(0, len(percentualData)-1, 1):
         valuePerc = (percentualData[idxPercent])["value_F"]
         valueProv = (proventosData[idxPercent])["valueSmall_F"]
-        valuePercColor = float(valuePerc.replace(",", ".").replace("%", ""))
-        colorPerc = "#cc0000" if valuePercColor < 30 else \
-            "#228b22" if valuePercColor > 70 else "#d4af37"
+        if value == "-":
+            color = "#000000"
+        else:
+            valuePercColor = float(
+                valuePerc.replace(",", ".").replace("%", ""))
+            colorPerc = "#cc0000" if valuePercColor < 30 else \
+                "#228b22" if valuePercColor > 70 else "#d4af37"
         if idxPercent == 0:
             finalData[0].update(
                 {'Proventos': [valueProv, "#d4af37"]})
