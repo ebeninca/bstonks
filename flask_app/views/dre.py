@@ -80,9 +80,10 @@ def dreApi(companyId):
     ''' copiando os anos ordenados do maior para o menor, o formato é uma lista
         de dict, porque é de facil aceitação pela biblioteca json
     '''
-    finalData = [dict({'year': year}) for year in dreDataJson['years']]
+    finalData = [dict({'year': [year, "#000000"]})
+                 for year in dreDataJson['years']]
     # inserindo TTM no inicio da lista
-    finalData.insert(0, dict({'year': 'TTM'}))
+    finalData.insert(0, dict({'year': ['TTM', "#000000"]}))
 
     ignoreKeys = ['Custos - (R$)', 'Lucro Bruto - (R$)', 'Despesas Receitas Operacionais - (R$)',
                   'Amortização Depreciação', 'EBIT - (R$)', 'Resultado não operacional - (R$)',
@@ -99,13 +100,14 @@ def dreApi(companyId):
     for idxLine, line in enumerate(passiveDataJson):
         valueTmp = (str(line['patrimonioLiquido']))[:-6]
         value = ('%.2f' % float(valueTmp[:-2] + '.' + valueTmp[2:])) + "M"
+        color = "#cc0000" if value.startswith("-") else "#2b1d0e"
         if idxLine == 0:
             finalData[0].update(
-                {'Patrimônio Líquido': value})
+                {'Patrimônio Líquido': [value, color]})
         for idx, data in enumerate(finalData):
-            if data['year'] == line['year']:
+            if (data['year'])[0] == line['year']:
                 finalData[idx].update(
-                    {'Patrimônio Líquido': value})
+                    {'Patrimônio Líquido': [value, color]})
 
     ''' vamos para a lista contendo os dados, será necessario
         transpor os dados de colunas para linhas
@@ -134,8 +136,23 @@ def dreApi(companyId):
             if 'DATA' in col['name'] and colName not in ignoreKeys:
                 # current_app.logger.debug(
                 #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
-                finalData[countDictItems].update({colName: (col['value']).replace(
-                    "\x20", "")})
+                value = (col['value']).replace("\x20", "")
+                if value == "-":
+                    color = "#000000"
+                elif "(%)" in colName:
+                    color = "#cc0000" if value.startswith("-") else "#505050"
+                elif "CAPEX - (R$)" in colName:
+                    color = "#000000"
+                elif "Dívida Líquida - (R$)" in colName:
+                    color = "#228b22" if value.startswith("-") else "#cc0000"
+                elif "Dívida Líquida Ebitda" in colName:
+                    valueColor = float(value.replace(",", "."))
+                    color = "#228b22" if valueColor < 2 else \
+                        "#cc0000" if valueColor > 3 else "#d4af37"
+                else:
+                    color = "#cc0000" if value.startswith("-") else "#228b22"
+
+                finalData[countDictItems].update({colName: [value, color]})
                 countDictItems += 1
 
         # stock['price'] = locale.currency(stock['price'])
@@ -150,7 +167,7 @@ def dreApi(companyId):
 
     callUrl = "https://statusinvest.com.br/acao/getfluxocaixa?"
     callUrl += "companyName=" + companyId
-    callUrl += "&type=2"
+    callUrl += "&type=0"
 
     respCash = requests.get(callUrl)
     cashDataJson = json.loads(respCash.text)
@@ -168,12 +185,13 @@ def dreApi(companyId):
             if 'DATA' in col['name'] and colName not in ignoreCashKeys:
                 # current_app.logger.debug(
                 #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
+                value = (col['value']).replace("\x20", "")
+                color = "#000000"
                 if countDictItems == 0:
-                    finalData[0].update({colName: (col['value']).replace(
-                        "\x20", "")})
+                    finalData[0].update({colName: [value, color]})
                 if countDictItems+1 < len(finalData):
-                    finalData[countDictItems+1].update({colName: (col['value']).replace(
-                        "\x20", "")})
+                    finalData[countDictItems +
+                              1].update({colName: [value, color]})
                     countDictItems += 1
 
     callUrl = "https://statusinvest.com.br/acao/payoutresult?"
@@ -190,18 +208,21 @@ def dreApi(companyId):
     proventosData.reverse()
 
     for idxPercent in range(0, len(percentualData)-1, 1):
-        valuePerc = percentualData[idxPercent]
-        valueProv = proventosData[idxPercent]
+        valuePerc = (percentualData[idxPercent])["value_F"]
+        valueProv = (proventosData[idxPercent])["valueSmall_F"]
+        valuePercColor = float(valuePerc.replace(",", ".").replace("%", ""))
+        colorPerc = "#cc0000" if valuePercColor < 30 else \
+            "#228b22" if valuePercColor > 70 else "#d4af37"
         if idxPercent == 0:
             finalData[0].update(
-                {'Proventos': valueProv['valueSmall_F']})
+                {'Proventos': [valueProv, "#d4af37"]})
             finalData[0].update(
-                {'Payout': valuePerc['value_F']})
+                {'Payout': [valuePerc, colorPerc]})
         if idxPercent+1 < len(finalData):
             finalData[idxPercent+1].update(
-                {'Proventos': valueProv['valueSmall_F']})
+                {'Proventos': [valueProv, "#d4af37"]})
             finalData[idxPercent+1].update(
-                {'Payout': valuePerc['value_F']})
+                {'Payout': [valuePerc, colorPerc]})
 
     # print(years)
     # print(finalData)

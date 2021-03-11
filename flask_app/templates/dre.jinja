@@ -45,9 +45,7 @@
                     <tr>
                         {% for col in colnames %}
                         <th scope="col" data-toggle="tooltip" data-placement="top" 
-                            title="Testando tooltip Testando tooltip Testando tooltip Testando tooltip 
-                            Testando tooltip Testando tooltip Testando tooltip Testando tooltip 
-                            Testando tooltip Testando tooltip Testando tooltip Testando tooltip ">{{ col }}</th>
+                            title="Testando tooltip Testando tooltip Testando">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
@@ -55,10 +53,13 @@
                     {% for stock in stocks %}
                     <tr>
                         {% for col in colnames %}
-                            {% if "companyName" in col or "ticker" in col %}
-                            <td class="text-left">{{ stock[col] }}</td>
+                            {% if "year" in col %}
+                            <td class="text-left" style="font-weight:bold">{{ (stock[col])[0] }}</td>
+                            {% elif stock[col] is defined %}
+                            <td class="text-right" style="font-weight:bold;color:{{ (stock[col])[1] }}">
+                                {{ (stock[col])[0] }}</td>
                             {% else %}
-                            <td class="text-right">{{ stock[col] }}</td>
+                            <td class="text-right" style="font-weight:bold">{{ "-" }}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
