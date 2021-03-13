@@ -38,8 +38,8 @@ def search():
     if companyInfoJson is None or len(companyInfoJson) == 0:
         return json.dumps({'Message': 'Nada foi encontrado aqui!'}), 400, {'content-type': 'application/json'}
 
-    result = [dict({"value": stock['normalizedName'], "text": stock['name']})
-              for stock in companyInfoJson]
+    result = [dict({"value": stock['normalizedName'], "text": stock['nameFormated']})
+              for stock in companyInfoJson if stock['type'] == 1]
 
     return json.dumps(result), 200, {'content-type': 'application/json'}
 
@@ -49,6 +49,8 @@ def data():
     form = request.form
     # and form.validate():
     if form.get('tickerSelect') != "" and request.method == 'POST':
+        if dreApi(form.get('tickerSelect')) is None:
+            return render_template('dre.jinja', message='Dados não encontrados!')
         respJson = json.loads(dreApi(form.get('tickerSelect'))[0])
         return render_template('dre.jinja', form=form, stocks=respJson,
                                colnames=(respJson[0]).keys())
@@ -69,6 +71,8 @@ def dreApi(companyId):
 
     resp = requests.get(callUrl)
     dreDataJson = json.loads(resp.text)
+    if len(dreDataJson) == 0:
+        return
     grid = dreDataJson['grid']
 
     locale.setlocale(locale.LC_MONETARY, '')
@@ -146,7 +150,8 @@ def dreApi(companyId):
                 elif "Dívida Líquida - (R$)" in colName:
                     color = "#228b22" if value.startswith("-") else "#cc0000"
                 elif "Dívida Líquida Ebitda" in colName:
-                    valueColor = float(value.replace(",", "."))
+                    valueColor = float(value.replace(
+                        ".", "").replace(",", "."))
                     color = "#228b22" if valueColor < 2 else \
                         "#cc0000" if valueColor > 3 else "#d4af37"
                 else:
@@ -201,20 +206,25 @@ def dreApi(companyId):
     respPayout = requests.get(callUrl)
     payoutDataJson = json.loads(respPayout.text)
 
+    # print(payoutDataJson)
+    if len((payoutDataJson['chart'])['series']) == 0:
+        return json.dumps(finalData), 200, {'content-type': 'application/json'}
+
     percentualData = ((payoutDataJson['chart'])['series'])['percentual']
     proventosData = ((payoutDataJson['chart'])['series'])['proventos']
+    yearsData = (payoutDataJson['chart'])['category']
 
     percentualData.reverse()
     proventosData.reverse()
 
-    for idxPercent in range(0, len(percentualData)-1, 1):
+    for idxPercent in range(len(percentualData)-1, -1, -1):
         valuePerc = (percentualData[idxPercent])["value_F"]
         valueProv = (proventosData[idxPercent])["valueSmall_F"]
         if value == "-":
             colorPerc = "#000000"
         else:
             valuePercColor = float(
-                valuePerc.replace(",", ".").replace("%", ""))
+                valuePerc.replace(".", "").replace(",", ".").replace("%", ""))
             colorPerc = "#cc0000" if valuePercColor < 30 else \
                 "#228b22" if valuePercColor > 70 else "#d4af37"
         if idxPercent == 0:
@@ -222,11 +232,16 @@ def dreApi(companyId):
                 {'Proventos': [valueProv, "#d4af37"]})
             finalData[0].update(
                 {'Payout': [valuePerc, colorPerc]})
-        if idxPercent+1 < len(finalData):
-            finalData[idxPercent+1].update(
-                {'Proventos': [valueProv, "#d4af37"]})
-            finalData[idxPercent+1].update(
-                {'Payout': [valuePerc, colorPerc]})
+
+        for idx, data in enumerate(finalData):
+            if idx > len(percentualData) or len(yearsData) == 0:
+                continue
+            if str((data['year'])[0]) == str(yearsData[0]):
+                finalData[idx].update(
+                    {'Proventos': [valueProv, "#d4af37"]})
+                finalData[idx].update(
+                    {'Payout': [valuePerc, colorPerc]})
+                yearsData.pop(0)
 
     # print(years)
     # print(finalData)

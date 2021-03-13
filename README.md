@@ -1,5 +1,14 @@
 # macas-stonks
 
+```
+# Activate venv
+source bin/activate
+# Deactivate
+deactivate
+# install modules
+pip install -r requirements.txt
+```
+
 https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
 
 https://statusinvest.com.br/acao/getbsactivepassivechart?companyName=paoacucar&type=2

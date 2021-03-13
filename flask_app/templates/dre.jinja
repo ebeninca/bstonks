@@ -18,8 +18,15 @@
         $('.basicAutoSelect').autoComplete({
             resolverSettings: {
                 url: '{{ url_for("dre.search") }}'
-            }
+            },
+            autoSelect: true
         });
+        $('.basicAutoSelect').on('autocomplete.dd.hidden', function (evt) {
+            //$('form').preventDoubleSubmission();
+            if($('.basicAutoSelect').val() === "")
+                return
+            $('form').submit();
+	    });
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
@@ -31,7 +38,7 @@
     <div class="jumbotron">
         <h1>Demonstrativo de resultado do exercício</h1>
         <form method="POST" action="{{ url_for('dre.data') }}">
-            <select onchange="this.form.submit()" class="form-control basicAutoSelect" 
+            <select class="form-control basicAutoSelect" 
             name="tickerSelect" placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
         </form> 
     </div>
