@@ -6,5 +6,12 @@
     ],
     "python.analysis.disabled": [
         "unresolved-import"
-    ]
+    ],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wrappingIndent": "same",
+    "editor.wordWrapColumn": 120,
+    "[asciidoc]": {
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": false
+    }
 }

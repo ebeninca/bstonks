@@ -4,9 +4,10 @@
     "request": "launch",
     "module": "flask",
     "env": {
-        "FLASK_APP": "app.py",
+        "FLASK_APP": "${workspaceRoot}/flask_app/app.py",
         "FLASK_ENV": "development",
         "FLASK_DEBUG": "0",
+        "PYTHONPATH": "${workspaceRoot}"
     },
     "args": [
         "run",

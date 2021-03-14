@@ -19,10 +19,11 @@
             resolverSettings: {
                 url: '{{ url_for("dre.search") }}'
             },
-            autoSelect: true
+            autoSelect: true,
+            preventEnter: true
         });
         $('.basicAutoSelect').on('autocomplete.dd.hidden', function (evt) {
-            //$('form').preventDoubleSubmission();
+            evt.preventDefault(); 
             if($('.basicAutoSelect').val() === "")
                 return
             $('form').submit();
@@ -38,9 +39,10 @@
     <div class="jumbotron">
         <h1>Demonstrativo de resultado do exercício</h1>
         <form method="POST" action="{{ url_for('dre.data') }}">
-            <select class="form-control basicAutoSelect" 
-            name="tickerSelect" placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
-        </form> 
+            <select class="form-control basicAutoSelect" name="tickerSelect" 
+            placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
+        </form>
+        <h3>{{ ticker }}</h3> 
     </div>
     {% if errorMsg %}
     <div class="alert alert-info" role="alert">{{ errorMsg }}</div>

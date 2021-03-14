@@ -53,7 +53,7 @@ def data():
             return render_template('dre.jinja', message='Dados não encontrados!')
         respJson = json.loads(dreApi(form.get('tickerSelect'))[0])
         return render_template('dre.jinja', form=form, stocks=respJson,
-                               colnames=(respJson[0]).keys())
+                               colnames=(respJson[0]).keys(), ticker=form.get('tickerSelect'))
         # if(respJson[1] == 400):
         #    return render_template('dre.jinja', errorMsg=respJson[0])
     return render_template('dre.jinja', form=request.form)
@@ -165,10 +165,11 @@ def dreApi(companyId):
         # stock['lpa'] = '%.2f' % stock['lpa']
         # stock['val_Intrinseco'] = locale.currency(stock['val_Intrinseco'])
 
-    ignoreCashKeys = ['Saldo Final de Caixa e Equivalentes - (R$)', 'Saldo Inicial de Caixa e Equivalentes - (R$)',
+    ignoreCashKeys = ['Caixa Gerado nas Operações - (R$)', 'Saldo Inicial de Caixa e Equivalentes - (R$)',
                       'Aumento de Caixa e Equivalentes - (R$)', 'Variação Cambial de Caixa e Equivalentes - (R$)',
                       'Variações nos Ativos e Passivos - (R$)', 'Depreciação e Amortização - (R$)',
-                      'Lucro Líquido - (R$)', 'Equivalência Patrimonial - (R$)', 'Caixa Líquido Atividades de Investimento - (R$)']
+                      'Lucro Líquido - (R$)', 'Equivalência Patrimonial - (R$)',
+                      'Caixa Líquido Atividades de Investimento - (R$)']
 
     callUrl = "https://statusinvest.com.br/acao/getfluxocaixa?"
     callUrl += "companyName=" + companyId
@@ -192,12 +193,29 @@ def dreApi(companyId):
                 #    f'{idxCol} - {countDictItems} - {finalData[countDictItems]}')
                 value = (col['value']).replace("\x20", "")
                 color = "#000000"
+                if "Caixa Líquido Atividades de Financiamento - (R$)" in colName:
+                    color = "#000000" if value.startswith("-") else "#cc0000"
+                elif "Caixa Líquido Atividades Operacionais - (R$)" in colName:
+                    color = "#cc0000" if value.startswith("-") else "#000000"
+
                 if countDictItems == 0:
                     finalData[0].update({colName: [value, color]})
+                    #finalData[0].find('Caixa Líquido Atividades Operacionais - (R$)')
                 if countDictItems+1 < len(finalData):
                     finalData[countDictItems +
                               1].update({colName: [value, color]})
                     countDictItems += 1
+
+    for idx, line in enumerate(finalData):
+        fco = line.get(
+            'Caixa Líquido Atividades Operacionais - (R$)', ['0', '#000000'])
+        fco = float(0 if fco[0] == '-' or fco[0] ==
+                    '' else fco[0].replace(".", "").replace(",", ".").replace("M", ""))
+        capex = line.get('CAPEX - (R$)', ['0', '#000000'])
+        capex = float(0 if capex[0] == '-' or capex[0] ==
+                      '' else capex[0].replace(".", "").replace(",", "."))
+        finalData[idx].update({'FCL CAPEX': [('%.2f' % (
+            fco - capex)) + "M", '#228b22' if (fco - capex) >= 0.0 else '#cc0000']})
 
     callUrl = "https://statusinvest.com.br/acao/payoutresult?"
     callUrl += "companyName=" + companyId
@@ -216,32 +234,32 @@ def dreApi(companyId):
 
     percentualData.reverse()
     proventosData.reverse()
+    yearsData.reverse()
 
     for idxPercent in range(len(percentualData)-1, -1, -1):
         valuePerc = (percentualData[idxPercent])["value_F"]
         valueProv = (proventosData[idxPercent])["valueSmall_F"]
+        year = yearsData[idxPercent]
+
         if value == "-":
-            colorPerc = "#000000"
+            color_perc = "#000000"
         else:
             valuePercColor = float(
                 valuePerc.replace(".", "").replace(",", ".").replace("%", ""))
-            colorPerc = "#cc0000" if valuePercColor < 30 else \
+            color_perc = "#cc0000" if valuePercColor < 30 else \
                 "#228b22" if valuePercColor > 70 else "#d4af37"
         if idxPercent == 0:
             finalData[0].update(
                 {'Proventos': [valueProv, "#d4af37"]})
             finalData[0].update(
-                {'Payout': [valuePerc, colorPerc]})
+                {'Payout': [valuePerc, color_perc]})
 
         for idx, data in enumerate(finalData):
-            if idx > len(percentualData) or len(yearsData) == 0:
-                continue
-            if str((data['year'])[0]) == str(yearsData[0]):
+            if str((data['year'])[0]) == str(year):
                 finalData[idx].update(
                     {'Proventos': [valueProv, "#d4af37"]})
                 finalData[idx].update(
-                    {'Payout': [valuePerc, colorPerc]})
-                yearsData.pop(0)
+                    {'Payout': [valuePerc, color_perc]})
 
     # print(years)
     # print(finalData)
