@@ -22,7 +22,6 @@
 
 {# We also set a default title, usually because we might forget to set one.
     In our sample app, we will most likely just opt not to change it #}
-{% block title %}Sample App for Flask-Bootstrap{% endblock %}
 
 {# Finally, round things out with navigation #}
 {% block content %}
@@ -32,11 +31,14 @@
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Macas Stonks</a>
+        <a class="navbar-brand" href="#">bStonks</a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             {{ render_nav_item('index','Home') }}
-            {{ render_nav_item('greenblatt','Greenblatt') }}
+            {{ render_nav_item('greenblatt.index','Greenblatt') }}
+            {{ render_nav_item('graham.index','Graham') }}
+            {{ render_nav_item('dre.index','DRE') }}
+            {# {{ render_nav_item('imposto.imposto','IRPF') }} #}
             </ul>
         </div>   
     </nav>

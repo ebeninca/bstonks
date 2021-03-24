@@ -1,0 +1,83 @@
+{% extends "base.jinja" %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        .table-sm{
+            font-size: 11px;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="
+        https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js">
+    </script>
+    <script>
+        $('.basicAutoSelect').autoComplete({
+            resolverSettings: {
+                url: '{{ url_for("dre.search") }}'
+            },
+            autoSelect: true,
+            preventEnter: true
+        });
+        $('.basicAutoSelect').on('autocomplete.dd.hidden', function (evt) {
+            evt.preventDefault(); 
+            if($('.basicAutoSelect').val() === "")
+                return
+            $('form').submit();
+	    });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+   {{ super() }}
+    <div class="jumbotron">
+        <h1>Demonstrativo de resultado do exercício</h1>
+        <form method="POST" action="{{ url_for('dre.data') }}">
+            <select class="form-control basicAutoSelect" name="tickerSelect" 
+            placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
+        </form>
+    </div>
+    {% if errorMsg %}
+    <div class="alert alert-info" role="alert">{{ errorMsg }}</div>
+    {% endif %}
+    <div class="mx-3">
+        <div class="table-responsive-sm">
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        {% if ticker %}
+                        <th colspan="{{ colnames|length }}">{{ ticker }}</th>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        {% for col in colnames %}
+                        <th scope="col">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        {% for col in colnames %}
+                            {% if "year" in col %}
+                            <td class="text-left" style="font-weight:bold">{{ (stock[col])[0] }}</td>
+                            {% elif stock[col] is defined %}
+                            <td class="text-right" style="font-weight:bold;color:{{ (stock[col])[1] }}">
+                                {{ (stock[col])[0] }}</td>
+                            {% else %}
+                            <td class="text-right" style="font-weight:bold">{{ "-" }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+{% endblock %}

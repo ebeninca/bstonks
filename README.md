@@ -1,5 +1,28 @@
 # macas-stonks
 
+```
+# Activate venv
+source bin/activate
+# Deactivate
+deactivate
+# install modules
+pip install -r requirements.txt
+```
+
+https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
+
+https://statusinvest.com.br/acao/getbsactivepassivechart?companyName=paoacucar&type=2
+
+
+https://statusinvest.com.br/category/advancedsearchresult?search={"Sector":""}&CategoryType=1
+
+
+https://statusinvest.com.br/category/tickerprice?ticker=ABEV3&type=0
+
+https://statusinvest.com.br/home/mainsearchquery?q=abev3
+
+https://github.com/jasondavindev/greenblatt-crawler
+
 https://macas-stonks.herokuapp.com/
 
 https://macas-stonks-dev.herokuapp.com/
@@ -25,7 +48,7 @@ https://medium.com/@ksashok/containerise-your-python-flask-using-docker-and-depl
 
 https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-pt
 
-https://www.fool.com/investing/general/2015/02/07/why-this-67-billion-hedge-fund-strategy-doesnt-wor.aspx
+
 
 https://realpython.com/offline-python-deployments-with-docker/
 

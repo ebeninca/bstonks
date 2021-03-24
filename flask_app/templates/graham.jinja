@@ -1,0 +1,55 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+   {{ super() }}
+    <div class="jumbotron">
+        <h1>Ações mais descontadas pela fórmula de Graham</h1>
+        <h6>* Removidas empresas com liquidez média diária menor que 200 mil reais.</h6>
+        <h6>* Removidas empresas com VPA e LPA negativos.</h6>
+
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <div class="custom-control custom-switch">
+                    <form method="POST" action="{{ url_for('graham.index') }}">
+                        <input class="custom-control-input" type="checkbox" id="advanced" name="advanced" value="advanced" {% if checkSelected %} checked {% endif %} 
+                        onclick="this.form.submit();">
+                        <label class="custom-control-label" for="advanced">Aplicar critérios avançados</label>
+                    </form>
+                </div>
+                <h6></h6>
+                <h6>* CAGR dos lucros superior a 4% a.a. nos ultimos 5 anos.</h6>
+                <h6>* Liquidez corrente maior que 1.</h6>
+                <h6>* Relação Dívida líquida / Patrimônio líquido maxima de 50%.</h6>
+            </div>
+        </div>
+
+    </div>
+    <div class="mx-3">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for col in colnames %}
+                        <th scope="col">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col in colnames %}
+                            {% if "companyName" in col or "ticker" in col %}
+                            <td class="text-left">{{ stock[col] }}</td>                             
+                            {% else %}
+                            <td class="text-right">{{ stock[col] }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+{% endblock %}
