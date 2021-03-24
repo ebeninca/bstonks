@@ -1,8 +1,15 @@
 '''
-Formula de greenblatt
+Formula de Greenblatt
 Formula de Graham
 Valuation DCF
 Modelo de Gordon
+Criterios Bazin = http://www.dinheiroinvestimentoelazer.com/2018/07/acoes-carteira-dividendos.html
+Buffet indicator?
+
+https://www.theglobaleconomy.com/Brazil/Stock_market_capitalization/
+https://www.capitalinvest-group.com/pt/calcular-valor-empresa-venda-multiplos/
+https://www.fool.com/investing/general/2015/02/07/why-this-67-billion-hedge-fund-strategy-doesnt-wor.aspx
+
 '''
 from flask import Flask, render_template, url_for, redirect
 from flask_bootstrap import Bootstrap
@@ -20,10 +27,6 @@ app.register_blueprint(bpGreenblatt)
 app.register_blueprint(bpGraham)
 app.register_blueprint(bpDre)
 app.register_blueprint(bpImposto)
-
-# app.extensions['bootstrap']['cdns']['jquery'] = WebCDN(
-#    '//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/'
-# )
 
 port = int(os.environ.get("PORT", 5000))
 bootstrap = Bootstrap(app)

@@ -5,7 +5,16 @@
     <div class="jumbotron">
         <h1>Ranking pela fórmula de Greenblatt</h1>
         <h6>* Removidas empresas com liquidez média diária menor que 200 mil reais.</h6>
-        <h6>* Removidas empresas com P/L e ROE negativos.</h6>
+        <h6>* Removidas empresas com Valor de mercado menor que 50 milhões de reais.</h6>
+        <h6>* Removidas empresas com P/L, ROE, EV/EBIT e ROIC negativos.</h6>
+        <h6>* Bancos não possuem ROIC e são automaticamente excluídos da opção "EV/EBIT e ROIC".</h6>
+
+        <form method="POST" action="{{ url_for('greenblatt.index') }}">
+            <select class="form-control" name="typeSelect" onchange="this.form.submit();" autocomplete="off">
+                <option value="cat1" {% if "cat1" in selectedType %} selected {% endif %}>PL e ROE</option>
+                <option value="cat2" {% if "cat2" in selectedType %} selected {% endif %}>EV/EBIT e ROIC</option>
+            </select>
+        </form>
     </div>
     <div class="mx-3">
         <div class="table-responsive">

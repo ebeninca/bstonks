@@ -13,11 +13,9 @@ https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
 
 https://statusinvest.com.br/acao/getbsactivepassivechart?companyName=paoacucar&type=2
 
-http://investidor-inteligente.com/benjamin-graham-margem-de-seguranca-investimento-acoes/
 
 https://statusinvest.com.br/category/advancedsearchresult?search={"Sector":""}&CategoryType=1
 
-https://www.capitalinvest-group.com/pt/calcular-valor-empresa-venda-multiplos/
 
 https://statusinvest.com.br/category/tickerprice?ticker=ABEV3&type=0
 
@@ -50,7 +48,7 @@ https://medium.com/@ksashok/containerise-your-python-flask-using-docker-and-depl
 
 https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-pt
 
-https://www.fool.com/investing/general/2015/02/07/why-this-67-billion-hedge-fund-strategy-doesnt-wor.aspx
+
 
 https://realpython.com/offline-python-deployments-with-docker/
 

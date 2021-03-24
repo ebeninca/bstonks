@@ -42,7 +42,6 @@
             <select class="form-control basicAutoSelect" name="tickerSelect" 
             placeholder="Digite para buscar, ex: Ambev, Itau" autocomplete="off"></select>
         </form>
-        <h3>{{ ticker }}</h3> 
     </div>
     {% if errorMsg %}
     <div class="alert alert-info" role="alert">{{ errorMsg }}</div>
@@ -52,9 +51,13 @@
             <table class="table table-sm table-striped">
                 <thead class="table-dark">
                     <tr>
+                        {% if ticker %}
+                        <th colspan="{{ colnames|length }}">{{ ticker }}</th>
+                        {% endif %}
+                    </tr>
+                    <tr>
                         {% for col in colnames %}
-                        <th scope="col" data-toggle="tooltip" data-placement="top" 
-                            title="Testando tooltip Testando tooltip Testando">{{ col }}</th>
+                        <th scope="col">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>

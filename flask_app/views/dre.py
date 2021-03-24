@@ -2,8 +2,6 @@
 O objetivo aqui é montar a DRE igual do fundamentei, sem as limitações impostas,
 como a API do statusinvest é aberta, então temos os dados, a dificuldade está em
 transpor as colunas de anos em linhas
-
-# TODO considerar Earnings Yield (EBIT/EV e L/P)
 """
 from flask import Flask, Blueprint, render_template, current_app, request
 
@@ -39,7 +37,7 @@ def search():
         return json.dumps({'Message': 'Nada foi encontrado aqui!'}), 400, {'content-type': 'application/json'}
 
     result = [dict({"value": stock['normalizedName'], "text": stock['nameFormated']})
-              for stock in companyInfoJson if stock['type'] == 1]
+              for stock in companyInfoJson if stock['type'] in (1, 12)]
 
     return json.dumps(result), 200, {'content-type': 'application/json'}
 
@@ -53,7 +51,7 @@ def data():
             return render_template('dre.jinja', message='Dados não encontrados!')
         respJson = json.loads(dreApi(form.get('tickerSelect'))[0])
         return render_template('dre.jinja', form=form, stocks=respJson,
-                               colnames=(respJson[0]).keys(), ticker=form.get('tickerSelect'))
+                               colnames=(respJson[0]).keys(), ticker=form.get('tickerSelect').upper())
         # if(respJson[1] == 400):
         #    return render_template('dre.jinja', errorMsg=respJson[0])
     return render_template('dre.jinja', form=request.form)
