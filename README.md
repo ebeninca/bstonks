@@ -1,4 +1,4 @@
-# macas-stonks
+# bStonks
 
 ```
 # Activate venv
