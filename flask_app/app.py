@@ -36,7 +36,10 @@ def index():
     app.logger.debug(app.url_map)
     return render_template('index.jinja')
 
-
+#<link rel="icon"
+#      type="image/png"
+#      sizes="16x16"
+#      href="{{ url_for('static', filename='favicon-16x16.png') }}">
 @app.route('/favicon.ico')
 def favicon():
     return redirect(url_for('static', filename='dollar_sign.ico'))

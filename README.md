@@ -1,12 +1,56 @@
 # bStonks
 
-```
+O objetivo é rankear ações por fórmulas já consagradas no mercado. 
+
+Conseguimos extrair os indicadores fundamentalistas pelo site statusinvest.com.br, o que elimina boa parte do trabalho de transformação de dados.
+
+Fórmulas já implementadas:
+* Joel Greenblatt (Little book of valuation).
+* Benjamin Graham (Security Analysis / Intelligent Investor).
+  
+Outras Funcionalidades:
+* DRE: Demonstrativo contabil de resultados de empresas por ano.
+
+
+A ideia no futuro é adicionar fórmulas mais avançadas, que dependem de input de dados projetados:
+* Valuation por fluxo de caixa descontado
+* Modelo de Gordon
+
+## Python Environment 
+
+> Versão utilizada: 3.9.1
+
+Comandos para executar a aplicação em ambiente local utilizando venv:
+
+* Windows cmd:
+```sh
+# Create venv
+py -m venv bstonks-venv
 # Activate venv
-source bin/activate
-# Deactivate
-deactivate
-# install modules
+bstonks-env/Scripts/activate.bat
+# Install modules
 pip install -r requirements.txt
+# Start app
+py ./flask_app/app.py
+
+# Deactivate
+bstonks-env/Scripts/deactivate.bat
+```
+
+* Windows cygwin:
+```sh
+# Create venv
+py -m venv bstonks-venv
+# Convert "activate" file EOL format from CR/LF to LF first 
+# Activate venv
+source ./bstonks-venv/Scripts/activate
+# Install modules
+pip install -r requirements.txt
+# Start app
+py ./flask_app/app.py
+
+# Deactivate venv
+deactivate
 ```
 
 https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
