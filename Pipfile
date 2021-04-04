@@ -52,6 +52,10 @@ Werkzeug = "==1.0.1"
 WTForms = "==2.3.3"
 
 [dev-packages]
+flake8 = "*"
+isort = "*"
+mypy = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.9"
