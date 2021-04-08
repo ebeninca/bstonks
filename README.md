@@ -20,7 +20,19 @@ A ideia no futuro é adicionar fórmulas mais avançadas, que dependem de input 
 
 > Versão utilizada: 3.9.1
 
-Comandos para executar a aplicação em ambiente local utilizando venv:
+Comandos para executar utilizando pipenv
+
+```sh
+# Create and select venv
+pipenv shell
+# Start application
+pipenv run python ./flask_app/app.py
+
+# exit venv
+exit
+```
+
+Comandos para executar utilizando venv:
 
 * Windows cmd:
 ```sh
@@ -53,6 +65,8 @@ py ./flask_app/app.py
 deactivate
 ```
 
+https://towardsdatascience.com/pipenv-to-heroku-easy-app-deployment-1c60b0e50996
+
 https://statusinvest.com.br/acao/payoutresult?companyName=paoacucar&type=2
 
 https://statusinvest.com.br/acao/getbsactivepassivechart?companyName=paoacucar&type=2
@@ -67,9 +81,6 @@ https://statusinvest.com.br/home/mainsearchquery?q=abev3
 
 https://github.com/jasondavindev/greenblatt-crawler
 
-https://macas-stonks.herokuapp.com/
-
-https://macas-stonks-dev.herokuapp.com/
 # referências
 
 https://bootstrap-flask.readthedocs.io/en/stable/migrate.html
