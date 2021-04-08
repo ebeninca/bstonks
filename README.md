@@ -54,6 +54,7 @@ bstonks-env/Scripts/deactivate.bat
 # Create venv
 py -m venv bstonks-venv
 # First convert "activate" file EOL format from CR/LF to LF 
+dos2unix ./bstonks-venv/Scripts/activate
 # Activate venv
 source ./bstonks-venv/Scripts/activate
 # Install modules
