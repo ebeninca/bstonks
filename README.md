@@ -23,8 +23,11 @@ A ideia no futuro é adicionar fórmulas mais avançadas, que dependem de input 
 Comandos para executar utilizando pipenv
 
 ```sh
+pip install pipenv
 # Create and select venv
 pipenv shell
+# install modules first time
+pipenv install -r requirements.txt
 # Start application
 pipenv run python ./flask_app/app.py
 
@@ -65,6 +68,12 @@ py ./flask_app/app.py
 # Deactivate venv
 deactivate
 ```
+
+https://pypi.org/project/yfinance/
+
+https://algotrading101.com/learn/yfinance-guide/
+
+https://medium.com/automated-trading/a-guide-to-automating-your-stock-analysis-with-python-4b6929e54201
 
 https://towardsdatascience.com/pipenv-to-heroku-easy-app-deployment-1c60b0e50996
 

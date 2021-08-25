@@ -20,11 +20,13 @@ import os
 from views.greenblatt import bpGreenblatt
 from views.graham import bpGraham
 from views.dre import bpDre
+from views.srank import bpSRank
 
 app = Flask(__name__)
 app.register_blueprint(bpGreenblatt)
 app.register_blueprint(bpGraham)
 app.register_blueprint(bpDre)
+app.register_blueprint(bpSRank)
 
 port = int(os.environ.get("PORT", 5000))
 bootstrap = Bootstrap(app)

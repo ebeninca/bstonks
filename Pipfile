@@ -47,9 +47,10 @@ Protego = "==0.1.16"
 PyDispatcher = "==2.0.5"
 PyHamcrest = "==2.0.2"
 pyOpenSSL = "==20.0.1"
-service_identity = "==18.1.0"
 Werkzeug = "==1.0.1"
 WTForms = "==2.3.3"
+selenium = "==3.141.0"
+service-identity = "==18.1.0"
 
 [dev-packages]
 flake8 = "*"
