@@ -20,11 +20,13 @@ import os
 from views.greenblatt import bpGreenblatt
 from views.graham import bpGraham
 from views.dre import bpDre
+from views.srank import bpSRank
 
 app = Flask(__name__)
 app.register_blueprint(bpGreenblatt)
 app.register_blueprint(bpGraham)
 app.register_blueprint(bpDre)
+app.register_blueprint(bpSRank)
 
 port = int(os.environ.get("PORT", 5000))
 bootstrap = Bootstrap(app)
@@ -36,7 +38,10 @@ def index():
     app.logger.debug(app.url_map)
     return render_template('index.jinja')
 
-
+#<link rel="icon"
+#      type="image/png"
+#      sizes="16x16"
+#      href="{{ url_for('static', filename='favicon-16x16.png') }}">
 @app.route('/favicon.ico')
 def favicon():
     return redirect(url_for('static', filename='dollar_sign.ico'))

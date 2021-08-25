@@ -1,0 +1,42 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+   {{ super() }}
+    <div class="jumbotron">
+        <h1>Ranking pela fórmula S-Rank</h1>
+        <h6>* Removidos Fundos Imobiliários com liquidez média diária menor que 200 mil reais.</h6>
+        <h6>* Removidos Fundos Imobiliários de Incorporação e Desenvolvimento.</h6>
+        <h6>* Removidos Fundos Imobiliários com P/VP e DY zerados ou negativos.</h6>
+        <br/>
+        <h6>* Obs1: StatusInvest não tem DY dos últimos 5 anos, foi considerado o DY atual.</h6>
+        <h6>* Obs2: StatusInvest não tem Data de início do Fundo de forma acessível, filtro de 1 ano de existência não aplicado.</h6>
+    </div>
+    <div class="mx-3">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for col in colnames %}
+                        <th scope="col">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        {% for col in colnames %}
+                            {% if "companyName" in col or "ticker" in col %}
+                            <td class="text-left">{{ stock[col] }}</td>
+                            {% else %}
+                            <td class="text-right">{{ stock[col] }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>
+{% endblock %}

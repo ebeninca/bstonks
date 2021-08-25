@@ -19,6 +19,17 @@ http://seuguiadeinvestimentos.com.br/a-tecnica-de-investimento-de-benjamin-graha
 https://smarttinvest.com/carteiras-recomendadas-old/dh-graham/
 http://www.acaoereacao.net/defens.html
 
+CRITERIOS AVANÇADOS:
+----
+Investidor Sardinha:
+Cagr 5% roe 5%
+Abaixo valor intrínseco
+Líder setor
+Dividendos 10 anos
+Lucros 10 anos
+Perenidade 30 anos 
+----
+Ação e Reação:
 1. Companhias proeminentes em seus setores.
 2. Vendas anuais substanciais: acima de US$ 250 milhões.
 3. Sólida posição financeira: Liquidez Corrente de pelo menos 1,00 e relação Dívida Líquida/Patrimônio Líquido máxima de 50%.
@@ -57,7 +68,7 @@ def grahamApi(advanced):
 
     if advanced:
         resp = requests.get(
-            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'dividaliquidaPatrimonioLiquido':{'Item1':null,'Item2':0.5},'liquidezCorrente':{'Item1':1,'Item2':null}, 'lucros_Cagr5':{'Item1':4,'Item2':null},'liquidezMediaDiaria':{'Item1':200000,'Item2':null}}")
+            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'dividaliquidaPatrimonioLiquido':{'Item1':null,'Item2':0.5},'liquidezCorrente':{'Item1':1,'Item2':null}, 'lucros_Cagr5':{'Item1':5,'Item2':null},'liquidezMediaDiaria':{'Item1':200000,'Item2':null},'roe':{'Item1':5,'Item2':null}}")
     else:
         resp = requests.get(
             "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'liquidezMediaDiaria':{'Item1':200000,'Item2':null}}")
@@ -74,6 +85,8 @@ def grahamApi(advanced):
             continue
 
         stock['dl_Pl'] = stock['dividaliquidaPatrimonioLiquido'] if 'dividaliquidaPatrimonioLiquido' in stock else 0
+        stock['liq_Corr'] = stock['liquidezCorrente'] if 'liquidezCorrente' in stock else 0
+
         stock['lucros_Cagr5'] = '%.2f' % round((
             0 if 'lucros_Cagr5' not in stock else stock['lucros_Cagr5']), 2)
         stock['val_Intrinseco'] = math.sqrt(
@@ -84,9 +97,9 @@ def grahamApi(advanced):
         stock['margem'] = ((float(
             stock['val_Intrinseco']) - float(stock['price'])) / float(stock['val_Intrinseco'])) * 100
 
-        for key in ['companyId', 'roic', 'roe', 'p_VP', 'p_Ebit', 'p_Ativo', 'margemBruta', 'margemEbit',
+        for key in ['companyId', 'roic', 'p_VP', 'p_Ebit', 'p_Ativo', 'margemBruta', 'margemEbit',
                     'margemLiquida', 'p_SR', 'p_CapitalGiro', 'p_AtivoCirculante', 'giroAtivos', 'roa',
-                    'dividaLiquidaEbit', 'pl_Ativo', 'passivo_Ativo',
+                    'dividaLiquidaEbit', 'pl_Ativo', 'passivo_Ativo', 'liquidezCorrente',
                     'peg_Ratio', 'receitas_Cagr5', 'liquidezMediaDiaria', 'p_L', 'eV_Ebit',
                     'valorMercado', 'dy', 'dividaliquidaPatrimonioLiquido']:
             stock.pop(key, None)
