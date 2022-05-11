@@ -36,7 +36,7 @@ def search():
     if companyInfoJson is None or len(companyInfoJson) == 0:
         return json.dumps({'Message': 'Nada foi encontrado aqui!'}), 400, {'content-type': 'application/json'}
 
-    result = [dict({"value": stock['normalizedName'], "text": stock['nameFormated']})
+    result = [dict({"value": stock['code'], "text": stock['nameFormated']})
               for stock in companyInfoJson if stock['type'] in (1, 12)]
 
     return json.dumps(result), 200, {'content-type': 'application/json'}
@@ -63,27 +63,28 @@ def dreApi(companyId):
 
     yearNow = datetime.datetime.now().year
     callUrl = "https://statusinvest.com.br/acao/getdre?"
-    callUrl += "companyName=" + companyId
+    callUrl += "code=" + companyId
     callUrl += "&type=0&range.min=2000"
-    callUrl += "&range.max=" + str(yearNow)
+    #callUrl += "&range.max=" + str(yearNow)
 
     resp = requests.get(callUrl)
     dreDataJson = json.loads(resp.text)
     if len(dreDataJson) == 0:
         return
-    grid = dreDataJson['grid']
+
+    grid = (dreDataJson['data'])['grid']
 
     locale.setlocale(locale.LC_MONETARY, '')
 
     ''' iniciando com a coluna dos anos, nos dados retornados pelo
         statusinvest, eles tem um lista propria, separada do resto dos dados
     '''
-    dreDataJson['years'].sort(reverse=True)
+    (dreDataJson['data'])['years'].sort(reverse=True)
     ''' copiando os anos ordenados do maior para o menor, o formato é uma lista
         de dict, porque é de facil aceitação pela biblioteca json
     '''
     finalData = [dict({'year': [year, "#000000"]})
-                 for year in dreDataJson['years']]
+                 for year in (dreDataJson['data'])['years']]
     # inserindo TTM no inicio da lista
     finalData.insert(0, dict({'year': ['TTM', "#000000"]}))
 
@@ -170,11 +171,11 @@ def dreApi(companyId):
                       'Caixa Líquido Atividades de Investimento - (R$)']
 
     callUrl = "https://statusinvest.com.br/acao/getfluxocaixa?"
-    callUrl += "companyName=" + companyId
+    callUrl += "code=" + companyId
     callUrl += "&type=0"
 
     respCash = requests.get(callUrl)
-    cashDataJson = json.loads(respCash.text)
+    cashDataJson = ((json.loads(respCash.text))['data'])['grid']
 
     for idx, content in enumerate(cashDataJson):
         if content['isHeader']:
@@ -216,7 +217,7 @@ def dreApi(companyId):
             fco - capex)) + "M", '#228b22' if (fco - capex) >= 0.0 else '#cc0000']})
 
     callUrl = "https://statusinvest.com.br/acao/payoutresult?"
-    callUrl += "companyName=" + companyId
+    callUrl += "code=" + companyId
     callUrl += "&type=2"
 
     respPayout = requests.get(callUrl)

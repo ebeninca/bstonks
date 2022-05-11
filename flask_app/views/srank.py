@@ -16,6 +16,7 @@ from flask import Flask, Blueprint, render_template, current_app, request
 import requests
 import json
 import logging
+import locale
 
 bpSRank = Blueprint('srank', __name__)
 
@@ -34,6 +35,7 @@ def index():
 @bpSRank.route('/api/srank/<category>')
 def srank_api(category):
     current_app.logger.info("### srankApi ###")
+    locale.setlocale(locale.LC_MONETARY, '')
 
     resp = requests.get(
         'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=2&search={"liquidezMediaDiaria":{"Item1":200000,"Item2":null}}')
@@ -71,11 +73,12 @@ def srank_api(category):
         stock['final_Score'] = int(
         stock[param1 + '_Score']) + int(stock[param2 + '_Score'])
 
-        for key in ['companyId', 'price', 'gestao', 'liquidezmediadiaria', 'dividend_cagr', 'cota_cagr', 'percentualcaixa', 'numerocotistas', 'patrimonio']:
+        for key in ['companyId', 'price', 'gestao', 'liquidezmediadiaria', 'dividend_cagr', 'cota_cagr', 'percentualcaixa', 'numerocotistas']:
             stock.pop(key, None)
 
         stock['p_vp'] = '%.2f' % round(stock['p_vp'], 2)
-        stock['dy'] = '%.2f' % round(stock['dy'], 2)
+        stock['dy'] = ('%.2f' % round(stock['dy'], 2))  + '%'
+        stock['patrimonio'] = locale.currency(stock['patrimonio'])
 
     stocksJson.sort(key=lambda x: (x["final_Score"]), reverse=True)
     return json.dumps(stocksJson), 200, {'content-type': 'application/json'}
