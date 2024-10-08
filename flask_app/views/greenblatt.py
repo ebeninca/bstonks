@@ -35,6 +35,13 @@ import logging
 
 bpGreenblatt = Blueprint('greenblatt', __name__)
 
+#cloudflare blocking non web browser requests
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Referer': 'https://statusinvest.com.br',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Connection': 'keep-alive'}
 
 @bpGreenblatt.route('/greenblatt', methods=['POST', 'GET'])
 def index():
@@ -52,7 +59,7 @@ def greenblatt_api(category):
     current_app.logger.info("### greenblattApi ###")
 
     resp = requests.get(
-        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={"liquidezMediaDiaria":{"Item1":200000,"Item2":null},"valorMercado":{"Item1":50000000,"Item2":null}}')
+        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={"liquidezMediaDiaria":{"Item1":200000,"Item2":null},"valorMercado":{"Item1":50000000,"Item2":null}}', headers=headers)
     stocksJson = json.loads(resp.text)
 
     param1 = 'p_L'

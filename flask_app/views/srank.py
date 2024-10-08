@@ -12,14 +12,25 @@ Nós compramos os 15 melhores FIIs desse ranking.
 
 """
 from flask import Flask, Blueprint, render_template, current_app, request
+from babel.numbers import format_currency
 
 import requests
 import json
 import logging
-import locale
 
 bpSRank = Blueprint('srank', __name__)
 
+#cloudflare blocking non web browser requests
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Referer': 'https://statusinvest.com.br',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Connection': 'keep-alive'}
+
+def formatar_moeda(valor):
+    # Reutilizar o locale definido anteriormente
+    return format_currency(valor, 'BRL', locale='pt_BR')
 
 @bpSRank.route('/srank', methods=['POST', 'GET'])
 def index():
@@ -35,14 +46,13 @@ def index():
 @bpSRank.route('/api/srank/<category>')
 def srank_api(category):
     current_app.logger.info("### srankApi ###")
-    locale.setlocale(locale.LC_MONETARY, '')
-
+    
     resp = requests.get(
-        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=2&search={"liquidezMediaDiaria":{"Item1":200000,"Item2":null}}')
+        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=2&search={"liquidezMediaDiaria":{"Item1":200000,"Item2":null}}', headers=headers)
     stocksJson = json.loads(resp.text)
 
     fiisDesenv = requests.get(
-        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=2&search={"Segment":"87","liquidezMediaDiaria":{"Item1":200000,"Item2":null}}')
+        'https://statusinvest.com.br/category/advancedsearchresult?CategoryType=2&search={"Segment":"87","liquidezMediaDiaria":{"Item1":200000,"Item2":null}}', headers=headers)
     fiisDesenvJson = json.loads(fiisDesenv.text)
 
     param1 = 'dy'
@@ -78,7 +88,9 @@ def srank_api(category):
 
         stock['p_vp'] = '%.2f' % round(stock['p_vp'], 2)
         stock['dy'] = ('%.2f' % round(stock['dy'], 2))  + '%'
-        stock['patrimonio'] = locale.currency(stock['patrimonio'])
+        stock['patrimonio'] = formatar_moeda(stock['patrimonio'])
 
     stocksJson.sort(key=lambda x: (x["final_Score"]), reverse=True)
     return json.dumps(stocksJson), 200, {'content-type': 'application/json'}
+
+

@@ -16,6 +16,12 @@ from forms.dreForm import DreForm
 
 bpDre = Blueprint('dre', __name__)
 
+headers = {
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+'Accept-Language': 'en-US,en;q=0.9',
+'Referer': 'https://statusinvest.com.br',
+'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+'Connection': 'keep-alive'}
 
 @bpDre.route('/dre')
 def index():
@@ -30,7 +36,7 @@ def search():
         return json.dumps([]), 200, {'content-type': 'application/json'}
 
     resp = requests.get(
-        "https://statusinvest.com.br/home/mainsearchquery?q=" + request.args.get('q'))
+        "https://statusinvest.com.br/home/mainsearchquery?q=" + request.args.get('q'), headers=headers)
 
     companyInfoJson = json.loads(resp.text)
     if companyInfoJson is None or len(companyInfoJson) == 0:
@@ -67,7 +73,7 @@ def dreApi(companyId):
     callUrl += "&type=0&range.min=2000"
     #callUrl += "&range.max=" + str(yearNow)
 
-    resp = requests.get(callUrl)
+    resp = requests.get(callUrl, headers=headers)
     dreDataJson = json.loads(resp.text)
     if len(dreDataJson) == 0:
         return
@@ -97,7 +103,7 @@ def dreApi(companyId):
     callUrl += "companyName=" + companyId
     callUrl += "&type=2"
 
-    respPassive = requests.get(callUrl)
+    respPassive = requests.get(callUrl, headers=headers)
     passiveDataJson = json.loads(respPassive.text)
 
     for idxLine, line in enumerate(passiveDataJson):
@@ -174,7 +180,7 @@ def dreApi(companyId):
     callUrl += "code=" + companyId
     callUrl += "&type=0"
 
-    respCash = requests.get(callUrl)
+    respCash = requests.get(callUrl, headers=headers)
     cashDataJson = ((json.loads(respCash.text))['data'])['grid']
 
     for idx, content in enumerate(cashDataJson):
@@ -220,7 +226,7 @@ def dreApi(companyId):
     callUrl += "code=" + companyId
     callUrl += "&type=2"
 
-    respPayout = requests.get(callUrl)
+    respPayout = requests.get(callUrl, headers=headers)
     payoutDataJson = json.loads(respPayout.text)
 
     # print(payoutDataJson)

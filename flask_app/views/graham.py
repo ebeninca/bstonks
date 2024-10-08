@@ -40,15 +40,26 @@ A recomendação básica de Graham é que o Lucro/Preço médio (o inverso do Pr
 7. Preço/Patrimônio Líquido moderado: o indicador não deve ultrapassar 150%. Mas, seguindo Graham, aceitamos um Preço/Patrimônio Líquido maior de 150% (ou 1,5) se o produto de Preço/Patrimônio Líquido x Preço/Lucro é menor que 22,50.
 '''
 from flask import Flask, Blueprint, render_template, current_app, request
+from babel.numbers import format_currency
 
 import requests
 import json
 import logging
-import locale
 import math
 
 bpGraham = Blueprint('graham', __name__)
 
+#cloudflare blocking non web browser requests
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Referer': 'https://statusinvest.com.br',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Connection': 'keep-alive'}
+
+def formatar_moeda(valor):
+    # Reutilizar o locale definido anteriormente
+    return format_currency(valor, 'BRL', locale='pt_BR')
 
 @bpGraham.route('/graham', methods=['POST', 'GET'])
 def index():
@@ -63,15 +74,14 @@ def index():
 @bpGraham.route('/api/graham/<advanced>')
 def grahamApi(advanced):
     current_app.logger.info("### graham ###")
-    locale.setlocale(locale.LC_MONETARY, '')
     resp = None
 
     if advanced:
         resp = requests.get(
-            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'dividaliquidaPatrimonioLiquido':{'Item1':null,'Item2':0.5},'liquidezCorrente':{'Item1':1,'Item2':null}, 'lucros_Cagr5':{'Item1':5,'Item2':null},'liquidezMediaDiaria':{'Item1':200000,'Item2':null},'roe':{'Item1':5,'Item2':null}}")
+            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'dividaliquidaPatrimonioLiquido':{'Item1':null,'Item2':0.5},'liquidezCorrente':{'Item1':1,'Item2':null}, 'lucros_Cagr5':{'Item1':5,'Item2':null},'liquidezMediaDiaria':{'Item1':200000,'Item2':null},'roe':{'Item1':5,'Item2':null}}", headers=headers)
     else:
         resp = requests.get(
-            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'liquidezMediaDiaria':{'Item1':200000,'Item2':null}}")
+            "https://statusinvest.com.br/category/advancedsearchresult?CategoryType=1&search={'liquidezMediaDiaria':{'Item1':200000,'Item2':null}}", headers=headers)
 
     stocksJson = json.loads(resp.text)
 
@@ -106,11 +116,11 @@ def grahamApi(advanced):
 
         # stock['dividaliquidaPatrimonioLiquido'] = '%.2f' % round(
         #    stock['dividaliquidaPatrimonioLiquido'], 2)
-        stock['price'] = locale.currency(stock['price'])
+        stock['price'] = formatar_moeda(stock['price'])
         stock['vpa'] = '%.2f' % round(stock['vpa'], 2)
         stock['lpa'] = '%.2f' % round(stock['lpa'], 2)
-        stock['val_Intrinseco'] = locale.currency(stock['val_Intrinseco'])
-        stock['desconto'] = locale.currency(stock['desconto'])
+        stock['val_Intrinseco'] = formatar_moeda(stock['val_Intrinseco'])
+        stock['desconto'] = formatar_moeda(stock['desconto'])
 
         # 'lucros_Cagr5','liquidezCorrente','dividaliquidaPatrimonioLiquido',
 

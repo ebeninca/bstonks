@@ -20,6 +20,8 @@ A ideia no futuro é adicionar fórmulas mais avançadas, que dependem de input 
 
 > Versão utilizada: 3.9.1
 
+### Windows
+
 Comandos para executar utilizando pipenv
 
 ```sh
@@ -60,6 +62,35 @@ py -m venv bstonks-venv
 dos2unix ./bstonks-venv/Scripts/activate
 # Activate venv
 source ./bstonks-venv/Scripts/activate
+# Install modules
+pip install -r requirements.txt
+# Start app
+py ./flask_app/app.py
+
+# Deactivate venv
+deactivate
+```
+
+### Ubuntu Linux
+
+```sh
+#sudo locale-gen pt_BR.UTF-8
+#sudo update-locale
+
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+
+sudo apt install python3.9
+python3.9 --version
+
+sudo apt install python3.9-venv
+
+# criar venv
+python3.9 -m venv bstonks-env
+
+#ativar venv
+source bstonks-env/bin/activate
+
 # Install modules
 pip install -r requirements.txt
 # Start app
